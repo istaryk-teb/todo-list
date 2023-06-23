@@ -23,22 +23,27 @@ export function EntryComponent(): JSX.Element {
     title: 'todo item #3',
     isDone: false
   }]);
-  let lastAddedId: number = todoList[todoList.length - 1].id || 1;
+  const [lastAddedId, setLastAddedId] = useState<number>(todoList[todoList.length - 1].id || 1);
 
   const onAddClick = (value: string) => {
     add({ title: value });
   }
 
-  const onRemoveClick = (idx: number) => {
-    remove(todoList[idx].id || 1);
+  const onRemoveClick = (id: number) => {
+    remove(id);
   }
-  const onDoneClick = (idx: number) => {
-    done(todoList[idx].id || 1);
+  const onDoneClick = (id: number) => {
+    done(id);
   }
 
   const add = async (item: TodoItem): Promise<void> => {
+    setLastAddedId(lastAddedId + 1);
+    console.log([
+      { ...item, id: lastAddedId + 1 },
+      ...todoList
+    ]);
     setTodoList([
-      { ...item, id: lastAddedId++ },
+      { ...item, id: lastAddedId + 1 },
       ...todoList
     ]);
   }
