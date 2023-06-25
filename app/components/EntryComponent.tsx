@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import { TodoItem } from '../models/todo-item';
+import { firestore } from '../services/firebase';
+import { TodoService } from '../services/todo.service';
 import { AddTodoItemForm } from './AddTodoItemForm';
 import { HeaderComponent } from './HeaderComponent';
 import { TodoListComponent } from './TodoListComponent';
@@ -10,23 +12,19 @@ export function EntryComponent(): JSX.Element {
 
   const todoListTitle: string = 'TEB Ihor Staryk';
   const todoListSubTitle: string = 'TODO List';
-  const [todoList, setTodoList] = useState<TodoItem[]>([{
-    id: 1,
-    title: 'todo item #1',
-    isDone: false
-  }, {
-    id: 2,
-    title: 'todo item #2',
-    isDone: false
-  }, {
-    id: 3,
-    title: 'todo item #3',
-    isDone: false
-  }]);
-  const [lastAddedId, setLastAddedId] = useState<number>(todoList[todoList.length - 1].id || 1);
+  const service = new TodoService(firestore);
+
+  const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const [lastAddedId, setLastAddedId] = useState<number>(todoList[todoList.length - 1]?.id || 1);
+
+  service.getList().then((list: TodoItem[]) => {
+    setTodoList(list);
+  }).catch((e) => {
+    console.log(e);
+  });
 
   const handleAdd = (value: string) => {
-    add({ title: value });
+    service.add({ title: value });
   }
 
   const handleRemove = (id: number) => {
