@@ -25,23 +25,19 @@ export function EntryComponent(): JSX.Element {
   }]);
   const [lastAddedId, setLastAddedId] = useState<number>(todoList[todoList.length - 1].id || 1);
 
-  const onAddClick = (value: string) => {
+  const handleAdd = (value: string) => {
     add({ title: value });
   }
 
-  const onRemoveClick = (id: number) => {
+  const handleRemove = (id: number) => {
     remove(id);
   }
-  const onDoneClick = (id: number) => {
+  const handleDone = (id: number) => {
     done(id);
   }
 
   const add = async (item: TodoItem): Promise<void> => {
     setLastAddedId(lastAddedId + 1);
-    console.log([
-      { ...item, id: lastAddedId + 1 },
-      ...todoList
-    ]);
     setTodoList([
       { ...item, id: lastAddedId + 1 },
       ...todoList
@@ -76,12 +72,12 @@ export function EntryComponent(): JSX.Element {
 
   return (
     <View>
-      <AddTodoItemForm add={onAddClick}></AddTodoItemForm>
+      <AddTodoItemForm add={handleAdd}></AddTodoItemForm>
       <HeaderComponent title={todoListTitle} subTitle={todoListSubTitle}></HeaderComponent>
       <TodoListComponent
         items={todoList}
-        remove={onRemoveClick}
-        done={onDoneClick}
+        remove={handleRemove}
+        done={handleDone}
       ></TodoListComponent>
     </View>
   )
