@@ -13,6 +13,7 @@ export function TodoListComponent(props: TodoListProps): JSX.Element {
     props.items?.length > 0
       ? (props.items || []).map((item: TodoItem) => (
         <TodoItemComponent
+          key={item.id}
           title={item.title}
           isDone={item.isDone}
           remove={() => props.remove && props.remove(item.id || 1)}
